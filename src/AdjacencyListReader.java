@@ -71,11 +71,11 @@ public class AdjacencyListReader {
     public void determineLineInformation(String[] lineTokens) {
         switch (lineTokens.length) {
             case 1: //end or start of adjacency list
-                //TODO: based on if start or end, do right action
 
                 //end, print off matrix
                 if (isEndOfRelationship(lineTokens[0])) {
-                    adjMatrix.print();
+                    System.out.println("Printing Matrix");
+                    System.out.println(adjMatrix.print());
                 } else { //start, set up matrix
 
                     adjMatrix = new AdjacencyMatrix(Integer.parseInt(lineTokens[0]));
@@ -88,6 +88,9 @@ public class AdjacencyListReader {
                 break;
 
         }
+
+
+
     }
 
 
@@ -115,6 +118,23 @@ public class AdjacencyListReader {
 
     }
 
+
+    public static void main(String[] args) {
+        //display welcome information
+        System.out.println("Adjacency list reader 1.0 \n Author: Bryce Nemer-Kaiser \n");
+        System.out.println("Usage: provides an absolute path to a file containing a set of adjacency lists. \n" +
+                "Functionality: \n \t (1) translate the adjacency list to a matrix \n" +
+                "\t (2) creates the adjacency matrix for the relation(s) \n" +
+                "\t (3) determines and displays total order \n");
+
+
+        AdjacencyListReader adjReader = new AdjacencyListReader();
+        adjReader.promptForInputFile();
+        adjReader.readAdjacencyListFile(adjReader.getAdjacencyListFilePathFromUser());
+        System.out.println("\n\nExecution complete. \nNow exiting");
+
+
+    }
 
 }
 

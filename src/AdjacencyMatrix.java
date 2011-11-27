@@ -16,15 +16,41 @@ public class AdjacencyMatrix {
      * @param numberOfVertices
      */
     public AdjacencyMatrix(int numberOfVertices) {
+        setUpMatrix(numberOfVertices);
     }
 
+
+    public String getRelationshipWeight(String firstVertex, String secondVertex){
+
+        String weight="0";
+        //get relationships involving first vertex
+        String[] firstVertexRelations = getValue(firstVertex).split(":");
+        //find relationship with second vertex
+        for(String s : firstVertexRelations){
+            //split into vertex and weight
+            String[] relationshipTokens= s.split(",");
+            //check for first vertex
+            if(relationshipTokens[0].contains(secondVertex)){
+                       weight=relationshipTokens[1];
+                break;
+            }
+        }
+
+
+        return weight;
+
+
+
+    }
     /**
      *
      * @param numberOfVertices
      */
     public void setUpMatrix(int numberOfVertices){
+       adjacencyMap= new HashMap();
+
         for(int i=0;i<numberOfVertices;i++){
-            adjacencyMap.put(Integer.toString(i),null);
+            adjacencyMap.put(Integer.toString(i),"");
         }
     }
 
@@ -56,6 +82,7 @@ public class AdjacencyMatrix {
     public void mapRelationship(String firstVertex, String secondVertex, String weight){
 
         adjacencyMap.put(firstVertex,getValue(firstVertex)+secondVertex+","+weight+":");
+
         adjacencyMap.put(secondVertex,getValue(secondVertex)+firstVertex+","+weight+":");
 
     }
@@ -74,16 +101,7 @@ public class AdjacencyMatrix {
             outputString += "[";
             //iterate over each column
             for (int c = 0; c < mapSize; c++) {
-
-                //if a relation exists between row and column, print 1
-                if (getValue(Integer.toString(r)).contains(Integer.toString(c))) {
-                    outputString += " 1";
-
-
-                    //otherwise, print 0
-                } else {
-                    outputString += " 0";
-                }
+                outputString+=" "+String.format("%2s",getRelationshipWeight(Integer.toString(r),Integer.toString(c)));
 
                 //formatting
                 if (c == mapSize - 1 && r != mapSize - 1) {
