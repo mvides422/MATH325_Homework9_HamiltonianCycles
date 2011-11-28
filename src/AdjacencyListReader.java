@@ -4,20 +4,27 @@ import java.io.FileReader;
 import java.util.Scanner;
 
 /**
- * Created by IntelliJ IDEA.
- * User: bryce
- * Date: 11/27/11
- * Time: 10:34 AM
- * To change this template use File | Settings | File Templates.
+ * Author: Bryce Nemer-Kaiser
+ * Date: 11/28/11
+ * Time: 09:00 AM
+ * This class contains the main method of the application and kicks off all operations. This class prompts for a file
+ * containing adjacency lists, translates the lists to an AdjacencyMatrix type object and determines the Hamiltonian
+ * cycle of least weight.
  */
 public class AdjacencyListReader {
 
     AdjacencyMatrix adjMatrix;
 
+    /**
+     * Default constructor
+     */
     public AdjacencyListReader() {
 
     }
 
+    /**
+     * Displays prompt for user
+     */
     public void promptForInputFile() {
         //prompt for file
         System.out.println("Enter an absolute path to a file containing adjacency lists:");
@@ -25,7 +32,7 @@ public class AdjacencyListReader {
     }
 
     /**
-     *
+     * Gets an absolute path for a file containing adjacency lists
      */
     public String getAdjacencyListFilePathFromUser() {
 
@@ -45,8 +52,9 @@ public class AdjacencyListReader {
 
 
     /**
-     * @param line
-     * @return
+     * Determines if the given input signifies an end of a relationship
+     * @param line -- the line of input to check
+     * @return true if it is the end of a relationship, false otherwise
      */
     public boolean isEndOfRelationship(String line) {
         if (line.equals("E")) {
@@ -59,14 +67,8 @@ public class AdjacencyListReader {
     }
 
     /**
-     *
-     */
-    public void readNumberOfVertices() {
-
-    }
-
-    /**
-     * @param lineTokens
+     * Breakdown a line of input and choose the correct action based on type of information
+     * @param lineTokens -- tokenized line of input
      */
     public void determineLineInformation(String[] lineTokens) {
         switch (lineTokens.length) {
@@ -88,14 +90,12 @@ public class AdjacencyListReader {
                 break;
 
         }
-
-
-
     }
 
 
     /**
-     * @param filePath
+     * Read each line of the file, line by line
+     * @param filePath -- an absolute path to a user supplied file
      */
     public void readAdjacencyListFile(String filePath) {
 
@@ -112,20 +112,25 @@ public class AdjacencyListReader {
                 determineLineInformation(lineTokens);
 
             }
+            //close file
+            sc.close();
         } catch (FileNotFoundException fnf) {
             System.out.println("Exception caught trying to open file " + filePath);
         }
 
     }
 
-
+    /**
+     * Main method to kick off the program
+     * @param args
+     */
     public static void main(String[] args) {
         //display welcome information
         System.out.println("Adjacency list reader 1.0 \n Author: Bryce Nemer-Kaiser \n");
-        System.out.println("Usage: provides an absolute path to a file containing a set of adjacency lists. \n" +
+        System.out.println("Usage: provide an absolute path to a file containing a set of adjacency lists. \n" +
                 "Functionality: \n \t (1) translate the adjacency list to a matrix \n" +
-                "\t (2) creates the adjacency matrix for the relation(s) \n" +
-                "\t (3) determines and displays total order \n");
+                "\t (2) creates the adjacency matrix for the weighted relation(s) \n" +
+                "\t (3) determines and displays a Hamiltonian cycle of least weight \n");
 
 
         AdjacencyListReader adjReader = new AdjacencyListReader();

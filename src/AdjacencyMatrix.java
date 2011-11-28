@@ -1,25 +1,31 @@
 import java.util.HashMap;
 
 /**
- * Created by IntelliJ IDEA.
- * User: bryce
- * Date: 11/27/11
- * Time: 11:03 AM
- * To change this template use File | Settings | File Templates.
+ * Author: Bryce Nemer-Kaiser
+ * Date: 11/28/11
+ * Time: 09:00 AM
+ * Data structure to represent an adjacency matrix in mathematics.
  */
 public class AdjacencyMatrix {
 
-    HashMap adjacencyMap;
+    /* The main data structure to hold relationships     */
+    private HashMap adjacencyMap;
 
     /**
-     *
-     * @param numberOfVertices
+     * Constructor for the adjacency matrix
+     * @param numberOfVertices -- how many vertices contained in a adjacency list
      */
     public AdjacencyMatrix(int numberOfVertices) {
+        //populate the matrix with empty data
         setUpMatrix(numberOfVertices);
     }
 
-
+    /**
+     * Given to vertices, determine the relationship weight.
+     * @param firstVertex -- the starting vertex
+     * @param secondVertex -- the next vertex
+     * @return the weight of the relationship. 0 if there is no path
+     */
     public String getRelationshipWeight(String firstVertex, String secondVertex){
 
         String weight="0";
@@ -35,38 +41,33 @@ public class AdjacencyMatrix {
                 break;
             }
         }
-
-
         return weight;
-
-
 
     }
     /**
-     *
-     * @param numberOfVertices
+     * Populate the matrix with vertices, but no relationships
+     * @param numberOfVertices -- the number of vertices in the adjacency list
      */
     public void setUpMatrix(int numberOfVertices){
        adjacencyMap= new HashMap();
-
+        //for every vertex, fill its location
         for(int i=0;i<numberOfVertices;i++){
             adjacencyMap.put(Integer.toString(i),"");
         }
     }
 
-
     /**
-     *
-     * @param key
-     * @return
+     * Get the set of relationships for a provided vertex
+     * @param key -- the vertex to look at
+     * @return the set of relationships for that vertex
      */
     public String getValue(String key){
         return adjacencyMap.get(key).toString();
     }
 
     /**
-     *
-     * @return
+     * Get the size of the map. Should always be the same as the number of vertices.
+     * @return the size of the map
      */
     public int getSize(){
         return adjacencyMap.size();
@@ -74,53 +75,22 @@ public class AdjacencyMatrix {
     }
 
     /**
-     *
+     * Map a relationship, including weight, to the matrix.
      * @param firstVertex
      * @param secondVertex
      * @param weight
      */
     public void mapRelationship(String firstVertex, String secondVertex, String weight){
-
+        //map the relationship as defined
         adjacencyMap.put(firstVertex,getValue(firstVertex)+secondVertex+","+weight+":");
-
+        //list is non directed, so map the reverse path too
         adjacencyMap.put(secondVertex,getValue(secondVertex)+firstVertex+","+weight+":");
 
     }
 
-    /**
-     *
-     * @param vertex
-     * @return
-     */
-    public String findClosestNeighbor(String vertex){
-
-        int leastWeight=99;
-        String closestNeighbor="-1";
-        //get relationships involving vertex
-        String[] vertexRelations = getValue(vertex).split(":");
-        //find relationship with second vertex
-        for(String s : vertexRelations){
-            //split into vertex and weight
-            String[] relationshipTokens= s.split(",");
-            //check for first vertex
-            if(Integer.parseInt(relationshipTokens[1])<=leastWeight){
-                       leastWeight=Integer.parseInt(relationshipTokens[1]);
-                       closestNeighbor=relationshipTokens[0];
-                break;
-            }
-        }
-        return closestNeighbor;
-    }
-
-    public void DEBUGprintClosestNeighbors(){
-        for(int i=0;i<getSize();i++){
-            System.out.println(i + "'s closet neighbor " + findClosestNeighbor(Integer.toString(i)));
-        }
-
-    }
 
     /**
-     *
+     * Display the adjacency matrix
      * @return
      */
     public String print(){
@@ -134,7 +104,7 @@ public class AdjacencyMatrix {
             //iterate over each column
             for (int c = 0; c < mapSize; c++) {
 
-
+                //format the string for display purposes
                 outputString+=" "+String.format("%2s",getRelationshipWeight(Integer.toString(r),Integer.toString(c)));
 
                 //formatting
@@ -156,8 +126,10 @@ public class AdjacencyMatrix {
     }
 
 
-
-
+    /**
+     * Finds a cycle of least weight that travels every node.  Uses every permutation of the vertex set to
+     * find the cycle through brute force.
+     */
     public void determineShortestPath(){
         int leastWeight=999999;
         int[] bestPath=null;
@@ -167,7 +139,7 @@ public class AdjacencyMatrix {
         for(int i=0;i<getSize();i++){
             vertexArray[i]=i;
         }
-
+        //permute the vertex set
         Permutations perm = new Permutations(getSize());
         perm.permute(vertexArray,0,vertexArray.length);
         System.out.println("num of perms: "+perm.getNumberOfPermutations());
@@ -203,17 +175,8 @@ public class AdjacencyMatrix {
                     //abandon search!
                     relationshipWeight=99999;
                     pathWeight+=relationshipWeight;
-                }else{
+                }else{  //add the relationship weight to the overall path weight
                     pathWeight+=relationshipWeight;
-
-                    /*
-                    //check if less than existing paths
-                    if(relationshipWeight<leastWeight){
-                        //update least weight
-                        leastWeight=relationshipWeight;
-                        bestPath=intPath;
-                    }
-                    */
                 }
 
             }
@@ -226,7 +189,7 @@ public class AdjacencyMatrix {
 
         }
 
-        //print least path
+        //print least weighted path
         System.out.print("Best path: ");
 
         //print each vertex
@@ -235,7 +198,7 @@ public class AdjacencyMatrix {
             System.out.print(bestPath[v]+ " ");
         }
 
-
+        //print the weight of the path
         System.out.println("Weight: "+leastWeight);
 
 
