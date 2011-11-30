@@ -142,7 +142,7 @@ public class AdjacencyMatrix {
         //permute the vertex set
         Permutations perm = new Permutations(getSize());
         perm.permute(vertexArray,0,vertexArray.length);
-        System.out.println("num of perms: "+perm.getNumberOfPermutations());
+        System.out.println("Number of permutations: "+perm.getNumberOfPermutations());
 
         //for every permutation, determine path weight
         for(int i=0;i<perm.getNumberOfPermutations();i++){
